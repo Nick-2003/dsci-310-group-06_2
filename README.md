@@ -13,3 +13,4 @@
 ## List of the dependencies needed to run analysis 
 
 ## Licenses
+- MIT License
