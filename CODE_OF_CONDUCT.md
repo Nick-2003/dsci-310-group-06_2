@@ -1,5 +1,9 @@
 # Code of Conduct 
 
+To make clear what is expected, everyone participating in this project is required to conform to the Code of Conduct. This Code of Conduct applies to all spaces managed by DSCI 310 including, but not limited to, class meetings, email communication, and online forums such as Piazza and GitHub. The DSCI 310 teaching team are expected to assist with the enforcement of the Code of Conduct.
+
+The DSCI 310 Instructor(s) is responsible for enforcing the Code of Conduct. All reports will be reviewed by the Instructor(s) and will be kept confidential.
+
 ## A Statement on diversity and inclusivity
 We are dedicated to providing a welcoming and supportive environment for all people, regardless of background or identity. As such, we do not tolerate behaviour that is disrespectful to our teachers or learners or that excludes, intimidates, or causes discomfort to others. We do not tolerate discrimination or harassment based on characteristics that include, but are not limited to, gender identity and expression, sexual orientation, disability, physical appearance, body size, citizenship, nationality, ethnic or social origin, pregnancy, familial status, veteran status, genetic information, religion or belief (or lack thereof), membership of a national minority, property, age, education, socio-economic status, technical choices, and experience level.
 
