@@ -21,6 +21,3 @@ jobs:
       - name: Run multiple commands # Treated as whole bash.sh script # Change later
         run: | 
           pwd
-          ls -a 
-      - name: Run multiple commands by .sh # Treated as whole bash.sh script # Change later
-        run: bash scripts/bash.sh
