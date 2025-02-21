@@ -1,0 +1,245 @@
+---
+title: "analysis_of_diabetes"
+format: pdf
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Summary
+
+\_\_\_
+
+## Introduction
+
+\_\_\_
+
+## Method and Results
+
+### Load relevant libraries
+
+```{r}
+options(repr.plot.width = 15, repr.plot.height = 10, warn = -1)
+
+library(reticulate) # Run python script in R; used for data extraction only
+library(tidyverse) # Better presentation of data
+# install.packages("tidymodels")
+library(tidymodels)
+library(ggplot2) # Provides commands to create complex plots
+library(patchwork)
+# install.packages("ROSE")
+library(ROSE) # Oversampling for balancing data
+```
+
+### Data loading 
+
+```{r}
+# Do only once. Takes ages but it works. 
+# This run the python script to extract file from uci in R
+
+py_run_file("/home/jovyan/work/src/dataset_download.py")
+```
+
+```{r}
+# Read out the raw csv
+raw_diabetes_df <- read_csv("/home/jovyan/work/data/raw/cdc_diabetes_health_indicators.csv", show_col_types = FALSE)
+head(raw_diabetes_df, n = 5)
+```
+
+### Wrangle and cleans the data from its original
+
+#### (1) Check for NA values
+
+-   There are no NAs present in this dataset
+
+```{r}
+# Check for NA values; there are no NAs present in this dataset
+na_check <- colSums(is.na(raw_diabetes_df))
+na_check
+```
+
+#### (2) Check the number of unique values in each variable + covert dbl to factor
+
+-   Some factors are still in quantitative form - also refer to metadata for what to convert
+
+```{r}
+class_counts <- sapply(raw_diabetes_df, function(x) length(unique(x)))
+class_counts
+```
+
+-   These variables need to be converted to factor type, especially when applying ROSE; synthesis of balanced samples depends on the format of the data
+
+-   Converting the following columns to factor type:
+
+```{r}
+factor_columns <- c("Diabetes_binary", "HighBP", "HighChol", "CholCheck", "Smoker", 
+                    "Stroke", "HeartDiseaseorAttack", "PhysActivity", "Fruits", 
+                    "Veggies", "HvyAlcoholConsump", "AnyHealthcare", "NoDocbcCost", 
+                    "DiffWalk", "Sex", "Age", "Education", "Income")
+
+raw_diabetes_df <- raw_diabetes_df %>%
+  mutate(across(all_of(factor_columns), ~ factor(.)))
+
+head(raw_diabetes_df, n = 5)
+```
+
+#### (3) Dataset balancing 
+
+-   We seek to balance the dataset to \<INSERT EXPLANATION HERE\>
+
+```{r}
+# (3) check how unbalance is the dataset + balance the data
+
+# it's pretty unbalanced
+target_result <- raw_diabetes_df %>%
+  group_by(Diabetes_binary) %>%
+  summarise(
+    Count = n(),
+    Proportion = n() / nrow(raw_diabetes_df)
+  ) %>%
+  ungroup()
+
+target_result
+
+# ----------------------------------------
+# use ROSE to balance data by oversampling
+
+set.seed(6)
+
+balanced_raw_diabetes_df <- ROSE(Diabetes_binary ~ ., data = raw_diabetes_df, seed = 123)$data
+
+balanced_target_result <- balanced_raw_diabetes_df %>%
+  group_by(Diabetes_binary) %>%
+  summarise(
+    Count = n(),
+    Proportion = n() / nrow(balanced_raw_diabetes_df)
+  ) %>%
+  ungroup()
+
+balanced_target_result
+```
+
+#### (4) Write out balanced dataframe and split to training and testing
+
+-   
+
+```{r}
+# Write out balanced df into data/processed/ so we don't have to run all the step above each time
+balanced_raw_diabetes_df %>% write_csv("/home/jovyan/work/data/processed/balanced_cdc_diabetes_health_indicators.csv")
+
+# Then read it out again so we dont have to run the steps above
+balanced_raw_diabetes_df <- read_csv("/home/jovyan/work/data/processed/balanced_cdc_diabetes_health_indicators.csv", show_col_types = FALSE)
+
+# Have to refactor them again, since we are reading these from .csv again
+factor_columns <- c("Diabetes_binary", "HighBP", "HighChol", "CholCheck", "Smoker", 
+                    "Stroke", "HeartDiseaseorAttack", "PhysActivity", "Fruits", 
+                    "Veggies", "HvyAlcoholConsump", "AnyHealthcare", "NoDocbcCost", 
+                    "DiffWalk", "Sex", "Age", "Education", "Income")
+
+balanced_raw_diabetes_df <- balanced_raw_diabetes_df %>%
+  mutate(across(all_of(factor_columns), ~ factor(.)))
+```
+
+```{r}
+# split the data into training and testing set 
+
+set.seed(6)
+
+diabetes_split <- initial_split(balanced_raw_diabetes_df, prop = 0.75, strata = Diabetes_binary)
+diabetes_train <- training(diabetes_split)
+diabetes_test <- testing(diabetes_split)
+```
+
+### Exploratory data analysis
+
+-   Functions to create plots
+
+```{r}
+# reusable function for plotting
+
+create_bar_plot <- function(data, x_var, title, x_label, y_label = "Count", y_limits = NULL) {
+  plot <- ggplot(data, aes(x = !!sym(x_var), fill = Diabetes_binary)) +
+    geom_bar(position = "dodge", color = "black") +
+    scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
+    labs(title = title, x = x_label, y = y_label) +
+    theme_minimal() +
+    theme(
+      text = element_text(size = 12, family = "Arial"),
+      plot.title = element_text(hjust = 0.5),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+  
+  if (!is.null(y_limits)) {
+    plot <- plot + scale_y_continuous(limits = y_limits)
+  }
+  
+  return(plot)
+}
+
+
+create_box_plot <- function(data, x_var, y_var, title, x_label, y_label) {
+  ggplot(data, aes(x = !!sym(x_var), y = !!sym(y_var), fill = !!sym(x_var))) +
+    geom_boxplot(outlier.shape = 16, outlier.size = 2) +
+    scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
+    labs(title = title, x = x_label, y = y_label) +
+    theme_minimal() +
+    theme(
+      text = element_text(size = 12, family = "Arial"),
+      plot.title = element_text(hjust = 0.5)
+    )
+}
+
+create_scatter_plot <- function(data, x_var, y_var, title, x_label, y_label) {
+  ggplot(data, aes(x = !!sym(x_var), y = !!sym(y_var), color = Diabetes_binary)) +
+    geom_point(alpha = 0.3, size = 3) +
+    scale_color_manual(values = c("#FF9999", "#66B2FF")) +
+    labs(title = title, x = x_label, y = y_label) +
+    theme_minimal() +
+    theme(
+      text = element_text(size = 12, family = "Arial"),
+      plot.title = element_text(hjust = 0.5)
+    )
+}
+```
+
+-   Creation of plots
+
+```{r}
+# Create bar plots
+max_y_value <- max(
+  max(table(diabetes_train$HighBP, diabetes_train$Diabetes_binary)),
+  max(table(diabetes_train$HighChol, diabetes_train$Diabetes_binary)),
+  max(table(diabetes_train$CholCheck, diabetes_train$Diabetes_binary)),
+  max(table(diabetes_train$Smoker, diabetes_train$Diabetes_binary))
+)
+
+y_limits <- c(0, max_y_value)
+
+plot_highbp <- create_bar_plot(diabetes_train, "HighBP", "Distribution of HighBP by Diabetes Status", "High Blood Pressure", y_limits = y_limits)
+plot_highchol <- create_bar_plot(diabetes_train, "HighChol", "Distribution of High Cholesterol by Diabetes Status", "High Cholesterol", y_limits = y_limits)
+plot_cholcheck <- create_bar_plot(diabetes_train, "CholCheck", "Distribution of Cholesterol Check by Diabetes Status", "Cholesterol Check", y_limits = y_limits)
+plot_smoker <- create_bar_plot(diabetes_train, "Smoker", "Distribution of Smoking by Diabetes Status", "Smoker", y_limits = y_limits)
+
+# Create box plot
+plot_bmi_box <- create_box_plot(diabetes_train, "Diabetes_binary", "BMI", "BMI Distribution by Diabetes Status", "Diabetes Status", "BMI")
+
+# Create scatter plot
+plot_bmi_age_scatter <- create_scatter_plot(diabetes_train, "BMI", "Age", "Scatter Plot of BMI vs Age by Diabetes Status", "BMI", "Age")
+```
+
+```{r}
+(plot_highbp | plot_highchol | plot_cholcheck) /
+(plot_smoker | plot_bmi_box | plot_bmi_age_scatter)
+```
+
+### Classification
+
+## Discussion
+
+\_\_\_
+
+## References
+
+-   
