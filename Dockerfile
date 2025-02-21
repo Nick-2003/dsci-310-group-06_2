@@ -1,7 +1,6 @@
-FROM rocker/rstudio:4.4.2
+FROM jupyter/r-notebook:x86_64-ubuntu-22.04
 
-RUN Rscript -e "install.packages('remotes')" # Double quotes for command itself, single quotes for within command 
-RUN Rscript -e "remotes::install_version('renv', version='1.0.11')" # Install renv; since install_version is the same as install.packages; renv starts over or use lock file to instlal everything with renv 
 
-COPY analysis.qmd /home/rstudio/analysis.qmd
-CMD ["quarto", "render", "/home/rstudio/analysis.qmd"] # May not work for .qmd
+RUN Rscript -e "install.packages('remotes', repos='https://cloud.r-project.org')"
+RUN Rscript -e "remotes::install_version('reticulate', version='1.25.0', repos='https://cloud.r-project.org')"
+RUN Rscript -e "remotes::install_version('ggplot2', version='3.3.6', repos='https://cloud.r-project.org')"
