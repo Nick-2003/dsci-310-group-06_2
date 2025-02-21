@@ -12,8 +12,22 @@ Quarto enables you to weave together content and executable code into a finished
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
-```{r}
-1 + 1
+```{python}
+from ucimlrepo import fetch_ucirepo 
+  
+# fetch dataset 
+cdc_diabetes_health_indicators = fetch_ucirepo(id=891) 
+  
+# data (as pandas dataframes) 
+X = cdc_diabetes_health_indicators.data.features 
+y = cdc_diabetes_health_indicators.data.targets 
+  
+# metadata 
+print(cdc_diabetes_health_indicators.metadata) 
+  
+# variable information 
+print(cdc_diabetes_health_indicators.variables) 
+
 ```
 
 You can add options to executable code like this
@@ -31,17 +45,18 @@ The `echo: false` option disables the printing of code (only output is displayed
 
 ## Method and Results
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+### Load relevant libraries
 
 ```{r}
-1 + 1
+library(dplyr) # Data manipulation operations
+library(tidyverse) # Better presentation of data
+library(ggplot2) # Provides commands to create complex plots
 ```
 
-You can add options to executable code like this
+### Data loading and cleaning
 
 ```{r}
-#| echo: false
-2 * 2
+diabetes = read.csv()
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
@@ -52,4 +67,4 @@ The `echo: false` option disables the printing of code (only output is displayed
 
 ## References
 
--
+-   
