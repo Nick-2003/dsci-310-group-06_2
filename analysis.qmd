@@ -56,7 +56,8 @@ library(ggplot2) # Provides commands to create complex plots
 ### Data loading and cleaning
 
 ```{r}
-diabetes = read.csv()
+diabetes = read.csv("data/cdc_diabetes_health_indicators.csv")
+summary(diabetes)
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
