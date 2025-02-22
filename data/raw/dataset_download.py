@@ -15,4 +15,4 @@ print(cdc_diabetes_health_indicators.metadata)
 print(cdc_diabetes_health_indicators.variables)
 
 df = pd.concat([X, y], axis=1)
-df.to_csv('cdc_diabetes_health_indicators.csv', index=False)
+df.to_csv('../data/raw/cdc_diabetes_health_indicators.csv', index=False)
