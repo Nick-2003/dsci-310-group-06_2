@@ -23,6 +23,7 @@ RUN if [ "$INSTALL_TIDYMODELS" = "true" ]; then \
     Rscript -e "if (!requireNamespace('workflows', quietly = TRUE)) remotes::install_version('workflows', version='1.1.3', repos='https://cloud.r-project.org', Ncpus=4)"; \
     fi
 
+RUN Rscript -e "remotes::install_version('readr', version='2.1.5', repos='https://cloud.r-project.org')"
 RUN Rscript -e "remotes::install_version('ggplot2', version='3.5.1', repos='https://cloud.r-project.org')" # Version too low
 RUN Rscript -e "remotes::install_version('patchwork', version='1.3.0', repos='https://cloud.r-project.org')"
 
