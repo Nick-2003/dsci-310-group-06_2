@@ -10,8 +10,10 @@ All contributors must abide by our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Steps for creating good issues or pull requests (For admins)
 
-1. Provide a properly descriptive summary for your commit.
-2. 
+1. Regularly pull changes from the `main` branch to your corresponding branch.
+2. Regularly commit your changes within your own branch; provide a succint descriptor of what changes have been applied, optionally with a decription.
+3. Push to your corresponding origin branch.
+4. 
 
 ## External documentation
 
