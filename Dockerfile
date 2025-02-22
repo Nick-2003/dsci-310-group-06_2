@@ -29,6 +29,3 @@ RUN Rscript -e "remotes::install_version('patchwork', version='1.3.0', repos='ht
 # Install python packages
 RUN Rscript -e "reticulate::py_install('pandas', method = 'conda')"
 RUN Rscript -e "reticulate::py_install('ucimlrepo', method = 'conda')"
-
-# # Copy any Quarto (.qmd) files into the container
-# COPY diabetes_classification.qmd /home/jovyan/
