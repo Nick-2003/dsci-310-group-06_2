@@ -9,4 +9,11 @@ We will review pull requests within 7 days.
 All contributors must abide by our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Steps for creating good issues or pull requests (For admins)
-1. 
+
+1. Provide a properly descriptive summary for your commit.
+2. 
+
+## External documentation
+
+- Anon. 2023. CDC diabetes health indicators. (September 2023). Retrieved February 22, 2025 from https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+- 
