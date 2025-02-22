@@ -8,14 +8,22 @@ you can fork our repo and submit a pull request.
 We will review pull requests within 7 days.
 All contributors must abide by our [code of conduct](CODE_OF_CONDUCT.md).
 
-## Steps for creating good issues or pull requests (For admins)
+## Issue requests
+
+1. Go to the "Issues" tab in GitHub.
+2. Click "New issue"
+3. Provide a reasonably descriptive title and elaborate in the description.
+
+## Pull requests
 
 1. Regularly pull changes from the `main` branch to your corresponding branch.
 2. Regularly commit your changes within your own branch; provide a succint descriptor of what changes have been applied, optionally with a decription.
 3. Push to your corresponding origin branch.
-4. 
+4. Create the pull request.
+    - Resolve any merge conflicts that pop up with Merge Editor on VSCode; do not recklessly combine both versions of the file together.
+    - Warning: `.ipynb` files will not work with Merge Editor on VSCode; please outline them on Google Docs first before committing.
+5. Apply merge commit; add more to extended decription if necessary.
 
 ## External documentation
 
-- Anon. 2023. CDC diabetes health indicators. (September 2023). Retrieved February 22, 2025 from https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
 - 
