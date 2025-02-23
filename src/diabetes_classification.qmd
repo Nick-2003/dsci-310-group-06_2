@@ -24,9 +24,17 @@ Quarto enables you to weave together content and executable code into a finished
 options(repr.plot.width = 15, repr.plot.height = 10, warn = -1)
 
 library(reticulate) # Run python script in R; used for data extraction only
-library(tidyverse) # Better presentation of data
+# library(tidyverse) # Better presentation of data
+
 # install.packages("tidymodels")
-library(tidymodels)
+# library(tidymodels)
+library(recipes)
+library(rsample)
+library(tune)
+library(broom)
+library(workflows)
+
+library(readr)
 library(ggplot2) # Provides commands to create complex plots
 library(patchwork)
 # install.packages("ROSE")
