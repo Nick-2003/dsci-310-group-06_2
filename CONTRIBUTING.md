@@ -26,4 +26,7 @@ All contributors must abide by our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## External documentation
 
-- 
+- [README.md](README.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [License](LICENSE.md)
+- [CDC Overview (2015)](src/overview_2015.pdf)
