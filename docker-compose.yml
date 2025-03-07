@@ -8,3 +8,15 @@
 #       - .:/home/jovyan/work/data
 #     environment: 
 #       PASSWORD: "password" # Set password to password
+
+services:
+  report-env:
+    image: nt2103/dsci310_g6
+    ports:
+      - "10000:8787"
+    volumes:
+      - ./reports:/home/rstudio/work/reports
+      - ./data:/home/rstudio/work/data
+      - ./src:/home/rstudio/work/src
+    environment: 
+      PASSWORD: "password" # Set password to password; Needs GUI
