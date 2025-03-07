@@ -20,3 +20,4 @@ services:
       - ./src:/home/rstudio/work/src
     environment: 
       PASSWORD: "password" # Set password to password; Needs GUI
+      DISABLE_AUTH: "true"
