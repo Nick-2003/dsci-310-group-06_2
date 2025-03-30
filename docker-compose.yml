@@ -1,23 +1,10 @@
-# services: # These are the containers I want you to run
-#   analysis-env: # When system loads up, can refer this particular container as analysis-env; otherwise will randomly use 2 words to name it 
-#     image: kayleeli/dsci310_g6_milestone1 # Using version specified on Docker Hub 
-#     ports: 
-#       - "10000:8888" # Default port
-#     volumes: # To mount
-#       - .:/home/jovyan/work/src # links to directory named "work"; /home/jovyan kept to avoid overwriting original home directory
-#       - .:/home/jovyan/work/data
-#     environment: 
-#       PASSWORD: "password" # Set password to password
-
 services:
   report-env:
-    image: nt2103/dsci310_g6
+    image: kayleeli/dsci310_g6_milestone1
     ports:
-      - "10000:8787"
+      - "10000:8888"
     volumes:
-      - ./reports:/home/rstudio/work/reports
-      - ./data:/home/rstudio/work/data
-      - ./src:/home/rstudio/work/src
-    environment: 
-      PASSWORD: "password" # Set password to password; Needs GUI
-      DISABLE_AUTH: "true"
+      - ./reports:/home/jovyan/work/reports
+      - ./data:/home/jovyan/work/data
+      - ./src:/home/jovyan/work/src
+    command: start-notebook.sh --NotebookApp.token=''
